@@ -14,7 +14,7 @@ function toggledrawmode() {
 
 var paths = Array();
 
-window.setInterval(performTime, 1000);
+window.setInterval(performTime, 100);
 
 function performTime() {
   var newPathsArray = Array();
@@ -23,11 +23,15 @@ function performTime() {
     if (path.dissolveTime == 0) {
       path.path.remove();
     } else {
-      path.dissolveTime--;
+      if (path.dissolveTime < 5000) {
+        path.path.setOpacity(path.dissolveTime / 5000);
+      }
+      path.dissolveTime -= 100;
       newPathsArray.push(path);
     }
   }
   paths = newPathsArray;
+  fc.renderAll();
 }
 
 //event happens everytime new line created on canvas
@@ -35,7 +39,7 @@ function performTime() {
 //wheneer event happens, that calls the function
 //the function is anonymous
 fc.on("path:created", function(path) {
-  path.dissolveTime = timeLimit.value;
+  path.dissolveTime = timeLimit.value * 1000;
 	console.log("path:created");
 	console.log(path)
 	var pathAsString = JSON.stringify(path);
