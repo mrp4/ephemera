@@ -69,3 +69,30 @@ function toggledrawmode() {
       //drawingOptionsEl.style.display = 'none';
     }
 }
+
+var ws;
+var serverAddress = document.URL.substring(document.URL.indexOf(":") + 3, document.URL.length - 1);
+setUpHost();
+console.log("serverAddress: " + serverAddress);
+
+function setUpHost() {
+    var wshost = "ws://" + serverAddress;
+    if (serverAddress.length > 0) {
+        ws = new WebSocket(wshost);
+        ws.onopen = function() {
+            console.log("WebSocket connected");
+        };
+
+        ws.onerror = function(e) {
+            alert("WebSocket Error: " + e);
+        };
+
+        ws.onclose = function(e) {
+            alert("WebSocket closed. E:" + e);
+        };
+
+        ws.onmessage = function(m) {
+            console.log(m.data.toString());
+        };
+    }
+}
