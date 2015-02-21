@@ -212,7 +212,7 @@ drawingShadowWidth.onchange = function() {
 };
 
 drawingShadowOffset.onchange = function() {
-	fc.freeDrawingBrush.shadowOffsetX =
+	fc.freeDrawingBrush.shadowOffsetX = parseInt(this.value, 10) || 0;
 	fc.freeDrawingBrush.shadowOffsetY = parseInt(this.value, 10) || 0;
 	this.previousSibling.innerHTML = this.value;
 };
