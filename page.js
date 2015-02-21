@@ -12,16 +12,35 @@ function toggledrawmode() {
     }
 }
 
+var paths = Array();
+
+window.setInterval(performTime, 1000);
+
+function performTime() {
+  var newPathsArray = Array();
+  for (var i = 0; i < paths.length; i++) {
+    var path = paths[i];
+    if (path.dissolveTime == 0) {
+      path.path.remove();
+    } else {
+      path.dissolveTime--;
+      newPathsArray.push(path);
+    }
+  }
+  paths = newPathsArray;
+}
+
 //event happens everytime new line created on canvas
 //ypu can set functions as callback
 //wheneer event happens, that calls the function
 //the function is anonymous
 fc.on("path:created", function(path) {
+  path.dissolveTime = timeLimit.value;
 	console.log("path:created");
 	console.log(path)
 	var pathAsString = JSON.stringify(path);
 	ws.send(pathAsString)
-
+  paths.push(path);
 });
 
 //websocket; what it uses to comm in realtime
@@ -71,6 +90,7 @@ function setUpHost() {
             	console.log(temp_path);
             	//adds path to canvas
               fc.add(temp_path);
+              paths.push(temp_path);
            	} catch (ex) {
            		console.log(ex)
            	}
