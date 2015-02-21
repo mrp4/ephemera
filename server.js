@@ -16,17 +16,6 @@ var webPort = common.webPort();
 var processPort = common.rankPort();
 var flickrPot = common.flickrPort();
 
-var processServer = new ws("ws://localhost:" + processPort);
-processServer.onerror = function(err) {
-  console.log("processServer error: " + err);
-};
-processServer.onopen = function() {
-  console.log("processServer connected");
-}
-processServer.onclose = function(err) {
-  console.log("processServer close: " + err);
-}
-
 
 
 /*
