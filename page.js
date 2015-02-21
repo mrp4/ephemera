@@ -54,17 +54,10 @@ function setUpHost() {
 				    strokeWidth: 1,
 				    fill: false
 				});
-            	temp_path.angle = path.path.angle;
-            	temp_path.backgroundColor = path.path.backgroundColor;
-            	temp_path.path = path.path.path;
-            	temp_path.top = path.path.top;
-            	temp_path.stroke = path.path.stroke;
-            	temp_path.strokeDashArray = path.path.strokeDashArray;
-            	temp_path.stroke
-            	temp_path.strokeMitreLimit = path.path.strokeMitreLimit;
-            	temp_path.strokeWidth = path.path.strokeWidth;
-            	temp_path.visible = path.path.visible;
-            	temp_path.width = path.path.width;
+				for (var k in path.path) {
+					console.log(k.toString());
+					temp_path[k] = path.path[k];
+				}
             	console.log("Received path from server:");
             	console.log(temp_path);
             	fc.add(temp_path);
