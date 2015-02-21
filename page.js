@@ -1,61 +1,3 @@
-context = document.getElementById('canvas').getContext("2d");
-
-$('#canvas').mousedown(function(e){
-  var mouseX = e.pageX - this.offsetLeft;
-  var mouseY = e.pageY - this.offsetTop;
-		
-  paint = true;
-  addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
-  redraw();
-});
-
-$('#canvas').mousemove(function(e){
-  if(paint){
-    addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
-    redraw();
-  }
-});
-
-$('#canvas').mouseup(function(e){
-  paint = false;
-});
-
-$('#canvas').mouseleave(function(e){
-  paint = false;
-});
-
-var clickX = new Array();
-var clickY = new Array();
-var clickDrag = new Array();
-var paint;
-
-function addClick(x, y, dragging)
-{
-  clickX.push(x);
-  clickY.push(y);
-  clickDrag.push(dragging);
-}
-
-function redraw(){
-  context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clears the canvas
-  
-  context.strokeStyle = "#df4b26";
-  context.lineJoin = "round";
-  context.lineWidth = 5;
-			
-  for(var i=0; i < clickX.length; i++) {		
-    context.beginPath();
-    if(clickDrag[i] && i){
-      context.moveTo(clickX[i-1], clickY[i-1]);
-     }else{
-       context.moveTo(clickX[i]-1, clickY[i]);
-     }
-     context.lineTo(clickX[i], clickY[i]);
-     context.closePath();
-     context.stroke();
-  }
-}
-
 var fc = new fabric.Canvas("canvas", {isDrawingMode: true})
 
 function toggledrawmode() {
@@ -69,6 +11,14 @@ function toggledrawmode() {
       //drawingOptionsEl.style.display = 'none';
     }
 }
+
+fc.on("path:created", function(path) {
+	console.log("path:created");
+	console.log(path)
+	var pathAsString = JSON.stringify(path);
+	ws.send(pathAsString)
+
+});
 
 var ws;
 var serverAddress = document.URL.substring(document.URL.indexOf(":") + 3, document.URL.length - 1);
@@ -93,6 +43,34 @@ function setUpHost() {
 
         ws.onmessage = function(m) {
             console.log(m.data.toString());
+            try {
+            	var path = JSON.parse(m.data.toString());
+            	console.log("JSON parsed");
+            	console.log(path);
+            	var temp_path = new fabric.Path('M 0 0 L 50 0 M 0 0 L 4 -3 M 0 0 L 4 3 z', {
+				    left: 100,
+				    top: 100,
+				    stroke: 'red',
+				    strokeWidth: 1,
+				    fill: false
+				});
+            	temp_path.angle = path.path.angle;
+            	temp_path.backgroundColor = path.path.backgroundColor;
+            	temp_path.path = path.path.path;
+            	temp_path.top = path.path.top;
+            	temp_path.stroke = path.path.stroke;
+            	temp_path.strokeDashArray = path.path.strokeDashArray;
+            	temp_path.stroke
+            	temp_path.strokeMitreLimit = path.path.strokeMitreLimit;
+            	temp_path.strokeWidth = path.path.strokeWidth;
+            	temp_path.visible = path.path.visible;
+            	temp_path.width = path.path.width;
+            	console.log("Received path from server:");
+            	console.log(temp_path);
+            	fc.add(temp_path);
+           	} catch (ex) {
+           		console.log(ex)
+           	}
         };
     }
 }

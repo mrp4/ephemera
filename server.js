@@ -92,24 +92,17 @@ wsServer.on("connection", function(ws) {
   ws.on("message", function(data) {
     console.log("WebSocket: Received message: " + data.toString());
     try {
-      var object = JSON.parse(data);
-      switch (object["type"]) {
-        case "SENDING_TRIP_INFO":
-
-          break;
-        default:
-
-      }
+      sendToWebClients(ws, data.toString())
     } catch (err) {
 
     }
   });
 });
 
-function sendToWebClients(line) {
-  console.log("Sending line: " + line + " to web clients");
+function sendToWebClients(ws, line) {
+  console.log("Sending line to web clients");
   for (var i = 0; i < wsList.length; i++) {
-    if (wsList[i] != this) {
+    if (wsList[i] != ws) {
       console.log("Sending line: " + line + " to web client " + i);
       wsList[i].send(line.toString());
     }
