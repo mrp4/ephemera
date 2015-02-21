@@ -1,5 +1,4 @@
 h1 {
- 
   color: black;
   text-align: center;
 }
@@ -9,7 +8,8 @@ p {
   font-size: 15px;
 }
 
-<h1>"Ephemera"</h1>
+<h1>Emphemera</h1>
+
 
 .navbar-brand {
   font-family: 'Pacifico', cursive;
@@ -25,7 +25,7 @@ body {
 }
 
 #canvas {
-  border: 2px solid grey;
+  border: 15px solid grey;
 }
 
 
