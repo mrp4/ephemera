@@ -90,13 +90,13 @@ function setUpHost() {
       				for (var k in path.path) {
       					temp_path[k] = path.path[k];
       				}
-        
+
             	console.log("Received path from server:");
             	console.log(temp_path);
             	//adds path to canvas
               fc.add(temp_path);
-
-              paths.push(temp_path);
+              path.path = temp_path;
+              paths.push(path);
            	} catch (ex) {
            		console.log(ex)
            	}
