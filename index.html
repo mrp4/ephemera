@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SkyHack</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="common.js"></script>
+    <script src="page.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans|Pacifico' rel='stylesheet' type='text/css'>
+
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="application/javascript"></script>
+
+      <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="components/datepicker/css/datepicker3.css">
+    <script src="components/datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="components/slides/jquery.slides.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default transparent" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">#boozecruise</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Trip Search</a></li>
+            <li><a href="#">About</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+                <li class="divider"></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Link</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4" id="sidebar">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">About your trip</h3>
+            </div>
+            <div class="panel-body">
+              <label for="budgetInput">Budget:</label>
+              <div class="input-group">
+                <span class="input-group-addon">&pound;</span>
+                <input id="budgetInput" type="number" class="form-control" placeholder="0"
+                  min="0" step="1">
+              </div>
+              <label for="datePicker">Date:</label>
+              <!--
+              <div class="input-append date" id="datePicker" data-date="12-02-2012" data-date-format="dd-mm-yyyy">
+                <input class="span2" id="datePickerInput" size="16" type="text" value="12-02-2012">
+                <span class="add-on"><i class="icon-th"></i></span>
+              </div>
+              -->
+              <div class="input-group date">
+                <input type="text" id="date-picker" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+              </div>
+              <label for="daysInput">Days:</label>
+              <input id="daysInput" type="number" class="form-control" placeholder="1" min="1" max="14" step="1">
+              <label for="departingFrom">Departing from:</label>
+              <input id="departingFrom" type="text" class="form-control" placeholder="" value="EDI" readonly>
+              <label for="boozeFactor">Booze factor (0 - 100%):</label>
+              <div class="input-group">
+                <input id="boozeFactor" type="number" class="form-control" placeholder="0"
+                  min="0" max="100" step="1">
+                <span class="input-group-addon">%</span>
+              </div>
+              <label for="cultureFactor">Culture factor (0 - 100%)</label>
+              <div class="input-group">
+                <input id="cultureFactor" type="number" class="form-control" placeholder="0"
+                  min="0" max="100" step="1">
+                <span class="input-group-addon">%</span>
+              </div>
+              <button class="btn btn-default btn-lg" onclick="sendDetails()">Search!</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8" id="resultsColumn">
+          <div class="jumbotron" id="welcomemessage">
+            <h1>Welcome to #boozecruise!</h1>
+            <p>Put in your details on the left and go on an adventure.</p>
+            <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>
