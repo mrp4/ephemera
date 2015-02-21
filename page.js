@@ -55,3 +55,5 @@ function redraw(){
      context.stroke();
   }
 }
+
+var fc = new fabric.Canvas("canvas")
