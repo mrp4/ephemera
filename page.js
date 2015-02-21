@@ -1,5 +1,12 @@
+/*
+* page.js contains all the JavaScript code that runs in the user's browser.
+*
+*/
+
+// The fc object is the fabric canvas used to draw everything.
 var fc = new fabric.Canvas("canvas", {isDrawingMode: true})
 
+// This function toggles whether the fabric canvas is in draw or object view mode.
 function toggledrawmode() {
 	fc.isDrawingMode = !fc.isDrawingMode;
     if (fc.isDrawingMode) {
@@ -12,25 +19,36 @@ function toggledrawmode() {
     }
 }
 
-var paths = Array();
+// This is the list of weird path-inside-'path' objects currently on the canvas.
+var pathContainers = Array();
 
-window.setInterval(performTime, 100);
+// Every TICK_INTERVAL milliseconds, the performTime function will be called by the browser window.
+var TICK_INTERVAL = 100;
+window.setInterval(performTime, TICK_INTERVAL);
 
+// This is the time in seconds when the dissolve should start
+var DISSOLVE_START_TIME = 5;
+
+// The performTime() method reduces the remaining amount of time for each path.
+// If the remaining time is zero, the path is removed from the canvas. Else, if
+// the remaining time is less than DISSOLVE_START_TIME, the opacity is reduced
+// so that the path starts to fade away gradually.
 function performTime() {
-  var newPathsArray = Array();
-  for (var i = 0; i < paths.length; i++) {
-    var path = paths[i];
+  var newPathContainersArray = Array();
+  for (var i = 0; i < pathContainers.length; i++) {
+    var pathContainer = pathContainers[i];
     if (path.dissolveTime == 0) {
-      path.path.remove();
+      pathContainer.path.remove();
     } else {
-      if (path.dissolveTime < 5000) {
-        path.path.setOpacity(path.dissolveTime / 5000);
+      if (pathContainer.dissolveTime < DISSOLVE_START_TIME * TICK_INTERVAL) {
+        pathContainer.path.setOpacity(pathContainer.dissolveTime / (DISSOLVE_START_TIME * TICK_INTERVAL));
       }
-      path.dissolveTime -= 100;
-      newPathsArray.push(path);
+      pathContainer.dissolveTime -= TICK_INTERVAL;
+      newPathContainersArray.push(pathContainer);
     }
   }
-  paths = newPathsArray;
+  pathContainers = newPathContainersArray;
+  // It is necessary to force the canvas to redraw when the opacity of any path changes
   fc.renderAll();
 }
 
@@ -38,45 +56,52 @@ function performTime() {
 //ypu can set functions as callback
 //wheneer event happens, that calls the function
 //the function is anonymous
-fc.on("path:created", function(path) {
-  path.dissolveTime = timeLimit.value * 1000;
+fc.on("path:created", function(pathContainer) {
+  pathContainer.dissolveTime = timeLimit.value * 1000;
 	console.log("path:created");
-	console.log(path)
-	var pathAsString = JSON.stringify(path);
+	console.log(pathContainer)
+	var pathAsString = JSON.stringify(pathContainer);
 	ws.send(pathAsString)
-  paths.push(path);
+  pathContainers.push(pathContainer);
 });
 
 //websocket; what it uses to comm in realtime
 //websocket.send to send
 var ws;
+// serverAddress is set to be the current web address with the http:// or https:// taken off
 var serverAddress = document.URL.substring(document.URL.indexOf(":") + 3, document.URL.length - 1);
 setUpHost();
 console.log("serverAddress: " + serverAddress);
 
+// setUpHost() returns the 
 function setUpHost() {
     var wshost = "ws://" + serverAddress;
     if (serverAddress.length > 0) {
+        // Initialise ws to be a new WebSocket instance, connecting to the wshost address
         ws = new WebSocket(wshost);
+        // When the ws opens, call this anonymous function
         ws.onopen = function() {
             console.log("WebSocket connected");
         };
 
+        // When the ws has an error, call this anonymous function
         ws.onerror = function(e) {
             alert("WebSocket Error: " + e);
         };
 
+        // When the ws closes, call this anonymous function
         ws.onclose = function(e) {
             alert("WebSocket closed. E:" + e);
         };
 
+        // When the ws receives a message from the server, call this anonymous function.
         ws.onmessage = function(m) {
             console.log(m.data.toString());
             try {
-            	var path = JSON.parse(m.data.toString());
+            	var pathContainer = JSON.parse(m.data.toString());
             	console.log("JSON parsed");
-            	console.log(path);
-              //deafault path, don't do anything with it, replace attributes
+            	console.log(pathContainer);
+              //default path, don't do anything with it, replace attributes
             	var temp_path = new fabric.Path('M 0 0 L 50 0 M 0 0 L 4 -3 M 0 0 L 4 3 z', {
       				    //default, deleted
                   left: 100,
@@ -87,16 +112,17 @@ function setUpHost() {
       				});
               //replace all data attributes with the remote one
               //k will be things like width, size; k is name instead of actual values
-      				for (var k in path.path) {
-      					temp_path[k] = path.path[k];
+      				for (var k in pathContainer.path) {
+      					temp_path[k] = pathContainer.path[k];
       				}
 
             	console.log("Received path from server:");
             	console.log(temp_path);
             	//adds path to canvas
               fc.add(temp_path);
-              path.path = temp_path;
-              paths.push(path);
+              pathContainer.path = temp_path;
+              // Add the path container to the list of path containers
+              pathContainers.push(pathContainer);
            	} catch (ex) {
            		console.log(ex)
            	}
