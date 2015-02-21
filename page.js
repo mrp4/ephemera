@@ -86,6 +86,7 @@ var drawingOptionsEl = $('#drawing-mode-options')[0],
 	drawingLineWidthEl = $('#drawing-line-width')[0],
 	drawingShadowWidth = $('#drawing-shadow-width')[0],
 	drawingShadowOffset = $('#drawing-shadow-offset')[0];
+  timeLimit = $('#time-limit')[0];
 
 if (fabric.PatternBrush) {
     var vLinePatternBrush = new fabric.PatternBrush(fc);
@@ -215,6 +216,11 @@ drawingShadowOffset.onchange = function() {
 	fc.freeDrawingBrush.shadowOffsetY = parseInt(this.value, 10) || 0;
 	this.previousSibling.innerHTML = this.value;
 };
+
+timeLimit.onchange = function() {
+  this.previousSibling.innerHTML = this.value;
+}
+
 if (fc.freeDrawingBrush) {
 	fc.freeDrawingBrush.color = drawingColorEl.value;
 	fc.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
