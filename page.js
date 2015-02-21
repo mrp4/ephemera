@@ -56,4 +56,16 @@ function redraw(){
   }
 }
 
-var fc = new fabric.Canvas("canvas")
+var fc = new fabric.Canvas("canvas", {isDrawingMode: true})
+
+function toggledrawmode() {
+	fc.isDrawingMode = !fc.isDrawingMode;
+    if (fc.isDrawingMode) {
+      modebutton.innerHTML = 'Cancel drawing mode';
+      //drawingOptionsEl.style.display = '';
+    }
+    else {
+      modebutton.innerHTML = 'Enter drawing mode';
+      //drawingOptionsEl.style.display = 'none';
+    }
+}
