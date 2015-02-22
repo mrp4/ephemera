@@ -229,13 +229,13 @@ if (fabric.PatternBrush) {
     else if (this.value === 'vline') {
       fc.freeDrawingBrush = hLinePatternBrush;
     }
-    else if (this.value === 'square') {
+    else if (this.value === 'Square') {
       fc.freeDrawingBrush = squarePatternBrush;
     }
-    else if (this.value === 'diamond') {
+    else if (this.value === 'Diamond') {
       fc.freeDrawingBrush = diamondPatternBrush;
     }
-    else if (this.value === 'texture') {
+    else if (this.value === 'Texture') {
       fc.freeDrawingBrush = texturePatternBrush;
     }
     else {
