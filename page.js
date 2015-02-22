@@ -26,8 +26,8 @@ var pathContainers = Array();
 var TICK_INTERVAL = 100;
 window.setInterval(performTime, TICK_INTERVAL);
 
-// This is the time in seconds when the dissolve should start
-var DISSOLVE_START_TIME = 5;
+// This is the time in milliseconds when the dissolve should start
+var DISSOLVE_START_TIME = 5000;
 
 // The performTime() method reduces the remaining amount of time for each path.
 // If the remaining time is zero, the path is removed from the canvas. Else, if
@@ -35,13 +35,15 @@ var DISSOLVE_START_TIME = 5;
 // so that the path starts to fade away gradually.
 function performTime() {
   var newPathContainersArray = Array();
+  console.log("Performing time");
   for (var i = 0; i < pathContainers.length; i++) {
     var pathContainer = pathContainers[i];
-    if (path.dissolveTime == 0) {
+    console.log(pathContainer);
+    if (pathContainer.dissolveTime == 0) {
       pathContainer.path.remove();
     } else {
-      if (pathContainer.dissolveTime < DISSOLVE_START_TIME * TICK_INTERVAL) {
-        pathContainer.path.setOpacity(pathContainer.dissolveTime / (DISSOLVE_START_TIME * TICK_INTERVAL));
+      if (pathContainer.dissolveTime < DISSOLVE_START_TIME) {
+        pathContainer.path.setOpacity(pathContainer.dissolveTime / (DISSOLVE_START_TIME));
       }
       pathContainer.dissolveTime -= TICK_INTERVAL;
       newPathContainersArray.push(pathContainer);
